@@ -1,53 +1,39 @@
-# NanoLLM Blog
+# NanoLLM
 
-NanoLLM is a free, public tutorial blog documenting how to build a GPT-style language model from scratch.
+**Building a transformer inference engine from scratch**
 
-The site is built with Astro and deployed to GitHub Pages with a push-to-publish workflow.
+Large language models like GPT, LLaMA, and Mistral can feel like black boxes. NanoLLM is a project to demystify them by building one piece at a time — from raw tensor math all the way to a working inference engine that generates text.
 
-## Stack
+## What You'll Learn
 
-- Astro (static site generation)
-- Markdown content collections (`src/content/blog`)
-- GitHub Actions CI/CD
-- GitHub Pages hosting (free)
+This tutorial series walks through building a minimal but complete transformer inference engine. By the end, you'll have code that can load pretrained weights and generate text token by token — the same core loop that powers every LLM you've used.
 
-## Local development
+The series covers:
+
+- **Tensors and linear algebra** — The data structures and operations at the heart of every model
+- **Transformer components** — Attention mechanisms, layer normalization, feed-forward networks, and residual connections
+- **Tokenization** — How text becomes numbers the model can process
+- **Model assembly** — Loading pretrained weights and wiring up a complete transformer
+- **Inference** — Sampling strategies and the autoregressive generation loop
+- **Optimization** — KV caching, profiling, and parallelism to make inference fast
+
+We won't implement training or backpropagation. The focus is entirely on understanding the architecture and running inference — the part that turns weights into words.
+
+## About This Repository
+
+This repo hosts the blog and tutorials at [nanollm.com](https://nanollm.com). The site is built with Astro and automatically deployed to GitHub Pages on every push.
+
+### Local Development
 
 ```sh
 npm install
 npm run dev
 ```
 
-Open `http://localhost:4321`.
+Open `http://localhost:4321` to view the site locally.
 
-## How publishing works
+### Content Structure
 
-1. Add or edit posts in `src/content/blog/*.md`.
-2. Commit and push to `main`.
-3. GitHub Actions workflow at `.github/workflows/deploy.yml` builds and deploys automatically.
+Tutorials are stored as Markdown files in `src/content/tutorials/`. Each tutorial has frontmatter with title, description, publication date, and hero image.
 
-No manual deployment step is needed.
-
-## Add a new post
-
-Create a Markdown file inside `src/content/blog/` with frontmatter:
-
-```md
----
-title: 'Post title'
-description: 'Short description'
-pubDate: 'Feb 17 2026'
-heroImage: '../../assets/blog-placeholder-1.jpg'
----
-
-Your content here.
-```
-
-## Domain setup
-
-- The custom domain is configured via `public/CNAME` as `nanollm.com`.
-- In GitHub repo settings, enable GitHub Pages and point DNS records for `nanollm.com` to GitHub Pages.
-
-## Future ads support
-
-When you are ready, ads can be added without changing hosting by injecting ad script tags in `src/components/BaseHead.astro` and placing ad blocks in layouts/pages.
+The site rebuilds and deploys automatically via GitHub Actions whenever changes are pushed to `main`.
