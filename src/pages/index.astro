@@ -5,40 +5,138 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const milestones = [
+	// Phase 1 — Tensor Core
 	{
-		title: '1. Foundations: tensors and core math',
-		description: 'Start with the basics needed to reason about model computations.',
-		href: '/blog/first-post/',
+		title: '1. What is a tensor?',
+		description: 'Multi-dimensional arrays as the foundation of every model computation — shapes, strides, and indexing.',
+		href: '/tutorials/first-post/',
 		status: 'Available',
 	},
 	{
-		title: '2. Transformer building blocks',
-		description: 'Attention, normalization, feed-forward layers, and how they fit together.',
-		href: '/blog',
+		title: '2. Tensor operations',
+		description: 'Element-wise math, scalar operations, and the building blocks that power every layer.',
+		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '3. Tokenization and model input',
-		description: 'How raw text becomes tokens and enters the model pipeline.',
-		href: '/blog',
+		title: '3. Memory layout matters',
+		description: 'Row-major order, cache lines, and why contiguous access is ~100x faster than random access.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	// Phase 2 — Linear Algebra
+	{
+		title: '4. Matrix multiplication',
+		description: 'The single most important operation in deep learning — naive implementation and why it matters.',
+		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '4. Forward pass and weights',
-		description: 'Connect learned weights and run an end-to-end inference pass.',
-		href: '/blog',
+		title: '5. Optimizing matmul',
+		description: 'Loop reordering, cache blocking, and going from 0.5 to 5 GFLOPS on a single CPU core.',
+		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '5. Text generation and sampling',
-		description: 'Generate tokens with simple decoding and sampling strategies.',
-		href: '/blog',
+		title: '6. Batched matrix multiplication',
+		description: 'Extending matmul to handle batches — essential for multi-head attention.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	// Phase 3 — Transformer Components
+	{
+		title: '7. Linear layers and GELU',
+		description: 'The fundamental building block: output = input × weight + bias, plus the activation that replaced ReLU.',
+		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '6. Optimization and performance',
-		description: 'Profile bottlenecks and improve inference speed step by step.',
-		href: '/blog',
+		title: '8. Layer normalization',
+		description: 'Stabilizing activations with mean/variance normalization and learned scale-shift parameters.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '9. Softmax and numerical stability',
+		description: 'Turning raw logits into probability distributions without overflow or underflow.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '10. Self-attention from scratch',
+		description: 'Queries, keys, values — the mechanism that lets tokens communicate with each other.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '11. Multi-head attention and causal masking',
+		description: 'Parallel attention heads and the mask that prevents looking into the future.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '12. Feed-forward networks',
+		description: 'The two-layer MLP where the model processes the information attention gathered.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '13. Transformer blocks and residual connections',
+		description: 'Assembling attention + FFN with skip connections and pre-norm into a complete block.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	// Phase 4 — Tokenization
+	{
+		title: '14. Tokenization',
+		description: 'Converting text to numbers and back — character-level encoding and the path to BPE.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	// Phase 5 — Model assembly
+	{
+		title: '15. Model weights and loading',
+		description: 'Reading pretrained parameters from binary files and placing them into the right structures.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '16. Embeddings and the forward pass',
+		description: 'Token and position embeddings, stacking transformer blocks, and producing logits end-to-end.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	// Phase 6 — Inference
+	{
+		title: '17. Sampling strategies',
+		description: 'Temperature, top-k, and nucleus sampling — controlling the randomness of generation.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '18. Autoregressive generation',
+		description: 'The generation loop: predict one token, append it, repeat — building a working inference engine.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	// Phase 7 — Optimization
+	{
+		title: '19. KV cache',
+		description: 'The key optimization for inference — caching keys and values to avoid redundant computation.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '20. Profiling and performance',
+		description: 'Finding bottlenecks, parallelizing with threads, and pre-allocating memory for speed.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	// Phase 8 — Advanced
+	{
+		title: '21. Rotary positional embeddings',
+		description: 'RoPE — encoding position directly into attention via rotation, as used in LLaMA and Mistral.',
+		href: '/tutorials',
 		status: 'Coming soon',
 	},
 ];
@@ -50,48 +148,178 @@ const milestones = [
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
 			.hero {
-				padding: 0.5rem 0 0.9rem;
-				max-width: 740px;
+				padding: 5rem 0 3.5rem;
+				max-width: 820px;
+				position: relative;
+			}
+			.hero::before {
+				content: '';
+				position: absolute;
+				top: -20px;
+				left: -40px;
+				width: 120px;
+				height: 120px;
+				background: radial-gradient(circle, rgba(210, 123, 123, 0.15), transparent 70%);
+				border-radius: 50%;
+				filter: blur(30px);
+				z-index: -1;
+			}
+			.hero-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.5rem 1rem;
+				margin-bottom: 1.5rem;
+				border-radius: 50px;
+				background: rgba(var(--surface), 0.8);
+				border: 1px solid rgba(var(--accent-rgb), 0.3);
+				font-size: 0.85rem;
+				font-weight: 600;
+				color: var(--accent);
+				letter-spacing: 0.02em;
+			}
+			.hero-badge-dot {
+				width: 6px;
+				height: 6px;
+				background: var(--accent);
+				border-radius: 50%;
+				animation: badge-pulse 2s ease-in-out infinite;
+			}
+			@keyframes badge-pulse {
+				0%, 100% { opacity: 1; transform: scale(1); }
+				50% { opacity: 0.6; transform: scale(0.9); }
 			}
 			.hero h1 {
-				font-size: clamp(1.9rem, 4vw, 2.8rem);
-				margin-bottom: 0.4rem;
+				font-size: clamp(2.5rem, 6vw, 3.8rem);
+				margin-bottom: 1.2rem;
+				line-height: 1.1;
+				font-weight: 800;
+				letter-spacing: -0.04em;
+				background: linear-gradient(135deg, rgb(var(--black)) 0%, rgba(var(--black), 0.88) 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				position: relative;
+			}
+			.hero h1::after {
+				content: '';
+				position: absolute;
+				bottom: -8px;
+				left: 0;
+				width: 80px;
+				height: 4px;
+				background: linear-gradient(90deg, var(--accent), transparent);
+				border-radius: 2px;
 			}
 			.hero p {
-				font-size: 0.98rem;
+				font-size: 1.15rem;
 				max-width: 62ch;
-				margin-bottom: 0.85rem;
-				color: rgb(var(--gray));
+				margin-bottom: 2rem;
+				color: rgba(var(--gray-dark), 0.75);
+				line-height: 1.7;
+				font-weight: 400;
 			}
 			.cta {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.6rem;
+				gap: 1rem;
+				align-items: center;
 			}
 			.cta a {
-				display: inline-block;
-				padding: 0.6rem 0.9rem;
-				border-radius: 8px;
-				font-weight: 560;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.9rem 1.8rem;
+				border-radius: 12px;
+				font-weight: 600;
 				text-decoration: none;
-				font-size: 0.92rem;
+				font-size: 1rem;
+				transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+				position: relative;
+				overflow: hidden;
 			}
 			.cta .primary {
-				background: linear-gradient(180deg, #cb7a7a, var(--accent-dark));
+				background: linear-gradient(135deg, #d27b7b 0%, var(--accent-dark) 100%);
 				color: #fff;
-				box-shadow: none;
+				box-shadow: 0 4px 14px rgba(210, 123, 123, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
+			}
+			.cta .primary::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+				transition: left 0.5s;
+			}
+			.cta .primary:hover::before {
+				left: 100%;
+			}
+			.cta .primary:hover {
+				box-shadow: 0 6px 20px rgba(210, 123, 123, 0.45), 0 3px 6px rgba(0, 0, 0, 0.25);
+				transform: translateY(-2px);
 			}
 			.cta .secondary {
 				border: 1px solid rgba(var(--border), 0.9);
-				color: rgb(var(--black));
+				color: rgb(var(--gray-dark));
 				background: rgba(var(--surface-soft), 0.42);
 			}
-			.roadmap {
-				margin-top: 1.5rem;
-				max-width: 980px;
+			.cta .secondary:hover {
+				color: rgb(var(--black));
+				background: rgba(var(--surface-soft), 0.6);
+				border-color: rgba(var(--accent-rgb), 0.4);
+				transform: translateY(-1px);
 			}
-			.roadmap p {
-				color: rgb(var(--gray));
+			.roadmap {
+				margin-top: 5rem;
+				max-width: 980px;
+				padding-top: 3rem;
+				border-top: 1px solid rgba(var(--border), 0.3);
+			}
+			.roadmap h2 {
+				margin-bottom: 0.5rem;
+				font-size: clamp(1.8rem, 3vw, 2.2rem);
+				font-weight: 750;
+				letter-spacing: -0.03em;
+			}
+			.roadmap > p {
+				color: rgba(var(--gray-dark), 0.65);
+				margin-bottom: 2.5rem;
+				font-size: 1.05rem;
+				max-width: 60ch;
+			}
+			/* --- Responsive hero adjustments --- */
+			@media (max-width: 720px) {
+				.hero {
+					padding: 3rem 0 2rem;
+				}
+				.hero::before {
+					display: none;
+				}
+				.hero-badge {
+					font-size: 0.8rem;
+					padding: 0.4rem 0.8rem;
+				}
+				.hero h1 {
+					margin-bottom: 1rem;
+				}
+				.hero h1::after {
+					width: 60px;
+					height: 3px;
+				}
+				.hero p {
+					font-size: 1.05rem;
+					margin-bottom: 1.5rem;
+				}
+				.cta a {
+					padding: 0.8rem 1.5rem;
+					font-size: 0.95rem;
+				}
+				.roadmap {
+					margin-top: 3.5rem;
+					padding-top: 2rem;
+				}
 			}
 			/* --- Timeline container --- */
 			.timeline-shell {
@@ -165,8 +393,8 @@ const milestones = [
 			.timeline-card {
 				display: block;
 				text-decoration: none;
-				padding: 0.75rem 0.85rem;
-				border-radius: 10px;
+				padding: 1rem 1.1rem;
+				border-radius: 12px;
 				background: rgb(var(--surface));
 				border: 1px solid rgba(var(--border), 0.75);
 				box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
@@ -197,27 +425,31 @@ const milestones = [
 			}
 			.timeline-title {
 				margin: 0;
-				font-size: 1rem;
-				line-height: 1.25;
+				font-size: 1.05rem;
+				line-height: 1.3;
 				color: rgb(var(--black));
+				font-weight: 650;
 			}
 			.status {
 				font-size: 0.75rem;
 				line-height: 1;
-				padding: 0.26rem 0.42rem;
+				padding: 0.3rem 0.5rem;
 				border-radius: 999px;
 				border: 1px solid rgba(var(--border), 0.8);
-				color: rgb(var(--gray));
+				color: rgba(var(--gray), 0.85);
 				white-space: nowrap;
+				font-weight: 500;
 			}
 			.status.live {
 				border-color: rgba(var(--accent-rgb), 0.75);
 				color: rgb(var(--black));
+				font-weight: 550;
 			}
 			.timeline-description {
-				margin: 0.35rem 0 0;
-				color: rgb(var(--gray));
-				font-size: 0.9rem;
+				margin: 0.45rem 0 0;
+				color: rgba(var(--gray-dark), 0.8);
+				font-size: 0.95rem;
+				line-height: 1.5;
 			}
 			/* --- Mobile --- */
 			@media (max-width: 720px) {
@@ -239,10 +471,6 @@ const milestones = [
 					margin-left: auto;
 					padding-left: 1rem;
 				}
-				.timeline-link,
-				.timeline-card {
-					padding: 0.78rem 0.9rem;
-				}
 			}
 		</style>
 	</head>
@@ -250,19 +478,33 @@ const milestones = [
 		<Header />
 		<main>
 			<section class="hero">
-				<h1>Learn AI architecture by building a tiny GPT-style model.</h1>
+				<div class="hero-badge">
+					<span class="hero-badge-dot"></span>
+					Open Source Learning Path
+				</div>
+				<h1>Master transformer architecture by building your own GPT</h1>
 				<p>
-					NanoLLM is a beginner-friendly guide to understanding transformer systems from the ground up.
-					Each concept is introduced in its own tutorial section.
+					A hands-on, beginner-friendly guide to understanding modern AI systems from first principles. Build a working language model while learning the fundamentals that power ChatGPT and Claude.
 				</p>
 				<div class="cta">
-					<a class="primary" href="/blog">Start reading</a>
+					<a class="primary" href="/tutorials">
+						Start building
+						<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity: 0.9;">
+							<path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</a>
+					<a class="secondary" href="#roadmap">
+						View learning path
+						<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity: 0.7;">
+							<path d="M8 3L8 13M8 13L4 9M8 13L12 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</a>
 				</div>
 			</section>
 
 			<section id="roadmap" class="roadmap" aria-label="Roadmap overview">
-				<h2>Roadmap at a glance</h2>
-				<p>Each milestone links to its tutorial guide. Most are in progress and marked clearly.</p>
+			<h2>Learning path</h2>
+			<p>21 bite-sized tutorials taking you from tensors to a working transformer inference engine.</p>
 				<div class="timeline-shell">
 					<svg class="timeline-path" aria-hidden="true">
 					</svg>

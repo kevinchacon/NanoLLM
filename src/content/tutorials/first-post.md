@@ -28,3 +28,10 @@ Before touching Transformer code, we should be explicit about what we are buildi
 - Use reproducible configuration for every experiment.
 
 In the next article, we’ll begin with tokenization strategy and corpus preparation.
+
+```cpp
+// testing how cpp code would look like
+int main() {
+    return 0;
+}
+```

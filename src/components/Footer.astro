@@ -4,7 +4,7 @@ const today = new Date();
 ---
 
 <footer>
-	<p>&copy; {today.getFullYear()} NanoLLM by Kevin Chacon.</p>
+	<p>&copy; {today.getFullYear()} NanoLLM by <a href="https://kevinchacon.com" target="_blank" rel="noopener noreferrer" class="author-link">Kevin Chacon</a>.</p>
 	<div class="social-links">
 		<a href={SITE_GITHUB_URL} target="_blank" rel="noopener noreferrer">
 			<span class="sr-only">Go to NanoLLM GitHub repository</span>
@@ -29,6 +29,16 @@ const today = new Date();
 	}
 	footer p {
 		margin: 0.2em 0;
+	}
+	.author-link {
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 500;
+		transition: color 0.2s ease;
+	}
+	.author-link:hover {
+		color: rgb(var(--black));
+		text-decoration: underline;
 	}
 	.social-links {
 		display: flex;

@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'tutorials'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
@@ -16,47 +16,186 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
-				width: min(960px, calc(100% - 2em));
+				width: min(920px, calc(100% - 2rem));
 				max-width: 100%;
 				margin: 0 auto;
+				padding: 2rem 1rem 4rem;
 			}
+			
+			article {
+				background: rgba(var(--surface), 0.5);
+				border: 1px solid rgba(var(--border), 0.4);
+				border-radius: 16px;
+				overflow: hidden;
+			}
+			
 			.hero-image {
 				width: 100%;
-				margin-top: 0.2rem;
+				aspect-ratio: 2 / 1;
+				overflow: hidden;
+				background: rgba(var(--bg), 0.8);
 			}
+			
 			.hero-image img {
 				display: block;
-				margin: 0 auto;
-				border-radius: 10px;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
 			}
+			
+			.content-wrapper {
+				padding: 2.5rem 3rem 3rem;
+			}
+			
+			.article-header {
+				margin-bottom: 2.5rem;
+				padding-bottom: 2rem;
+				border-bottom: 1px solid rgba(var(--border), 0.3);
+			}
+			
+			.date-info {
+				display: flex;
+				gap: 0.5rem;
+				align-items: center;
+				margin-bottom: 1rem;
+				color: rgba(var(--gray), 0.85);
+				font-size: 0.88rem;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+			}
+			
+			.date-separator {
+				color: rgba(var(--border), 0.8);
+			}
+			
+			.last-updated-on {
+				font-style: normal;
+				color: rgba(var(--gray), 0.7);
+			}
+			
+			.article-header h1 {
+				margin: 0;
+				font-size: 2.5rem;
+				font-weight: 800;
+				line-height: 1.2;
+				letter-spacing: -0.02em;
+				background: linear-gradient(135deg, rgb(var(--black)) 0%, rgba(var(--gray-dark), 0.9) 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+			
 			.prose {
-				width: 760px;
-				max-width: calc(100% - 1.2em);
-				margin: 1.05rem auto 0;
+				color: rgb(var(--gray-dark));
+				font-size: 1.05rem;
+				line-height: 1.75;
+			}
+			
+			.prose :global(h2) {
+				margin: 2.5rem 0 1rem;
+				font-size: 1.75rem;
+				font-weight: 700;
+				color: rgb(var(--black));
+				letter-spacing: -0.01em;
+			}
+			
+			.prose :global(h3) {
+				margin: 2rem 0 0.8rem;
+				font-size: 1.4rem;
+				font-weight: 700;
+				color: rgb(var(--black));
+			}
+			
+			.prose :global(h4) {
+				margin: 1.5rem 0 0.6rem;
+				font-size: 1.15rem;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+			
+			.prose :global(p) {
+				margin: 1rem 0;
+			}
+			
+			.prose :global(a) {
+				color: var(--accent);
+				text-decoration: none;
+				border-bottom: 1px solid rgba(var(--accent-rgb), 0.3);
+				transition: all 0.2s ease;
+			}
+			
+			.prose :global(a:hover) {
+				color: rgb(var(--black));
+				border-bottom-color: var(--accent);
+			}
+			
+			.prose :global(code) {
+				background: rgba(var(--gray-light), 0.8);
+				color: rgb(var(--accent-rgb));
+				padding: 0.2em 0.4em;
+				border-radius: 4px;
+				font-size: 0.92em;
+				font-family: 'Monaco', 'Courier New', monospace;
+			}
+			
+			.prose :global(pre) {
+				background: rgba(var(--bg), 0.6);
+				border: 1px solid rgba(var(--border), 0.5);
+				border-radius: 8px;
+				padding: 1.2rem;
+				overflow-x: auto;
+				margin: 1.5rem 0;
+			}
+			
+			.prose :global(pre code) {
+				background: none;
 				padding: 0;
 				color: rgb(var(--gray-dark));
 			}
-			.title {
-				margin-bottom: 1rem;
-				padding: 0.3em 0 0.7em;
-				text-align: left;
-				line-height: 1;
-				border-bottom: 1px solid rgba(var(--border), 0.75);
-			}
-			.title h1 {
-				margin: 0.25rem 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
+			
+			.prose :global(blockquote) {
+				margin: 1.5rem 0;
+				padding-left: 1.5rem;
+				border-left: 3px solid var(--accent);
 				color: rgb(var(--gray));
-				font-size: 0.84rem;
-			}
-			.last-updated-on {
 				font-style: italic;
 			}
+			
+			.prose :global(ul),
+			.prose :global(ol) {
+				margin: 1rem 0;
+				padding-left: 1.5rem;
+			}
+			
+			.prose :global(li) {
+				margin: 0.5rem 0;
+			}
+			
+			.prose :global(img) {
+				max-width: 100%;
+				height: auto;
+				border-radius: 8px;
+				margin: 1.5rem 0;
+			}
+			
+			.prose :global(hr) {
+				margin: 2.5rem 0;
+				border: none;
+				border-top: 1px solid rgba(var(--border), 0.3);
+			}
+			
 			@media (max-width: 720px) {
+				.content-wrapper {
+					padding: 2rem 1.5rem 2.5rem;
+				}
+				
+				.article-header h1 {
+					font-size: 2rem;
+				}
+				
 				.prose {
-					max-width: 100%;
+					font-size: 1rem;
 				}
 			}
 		</style>
@@ -66,25 +205,29 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
+				{heroImage && (
+					<div class="hero-image">
+						<Image width={1840} height={920} src={heroImage} alt="" />
+					</div>
+				)}
+				<div class="content-wrapper">
+					<div class="article-header">
+						<div class="date-info">
 							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
+							{updatedDate && (
+								<>
+									<span class="date-separator">•</span>
+									<span class="last-updated-on">
+										Updated <FormattedDate date={updatedDate} />
+									</span>
+								</>
+							)}
 						</div>
 						<h1>{title}</h1>
-						<hr />
 					</div>
-					<slot />
+					<div class="prose">
+						<slot />
+					</div>
 				</div>
 			</article>
 		</main>
