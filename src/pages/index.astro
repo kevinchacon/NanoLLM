@@ -5,136 +5,143 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const milestones = [
-	// Phase 1 — Tensor Core
+	// Introduction
 	{
-		title: '1. What is a tensor?',
-		description: 'Multi-dimensional arrays as the foundation of every model computation — shapes, strides, and indexing.',
+		title: '0. Introduction: what we\'re building',
+		description: 'A high-level overview of the project — what a transformer inference engine is and how this series is structured.',
 		href: '/tutorials/first-post/',
 		status: 'Available',
 	},
+	// Phase 1 — Tensor Core
 	{
-		title: '2. Tensor operations',
+		title: '2. What is a tensor?',
+		description: 'Multi-dimensional arrays as the foundation of every model computation — shapes, strides, and indexing.',
+		href: '/tutorials',
+		status: 'Coming soon',
+	},
+	{
+		title: '3. Tensor operations',
 		description: 'Element-wise math, scalar operations, and the building blocks that power every layer.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '3. Memory layout matters',
+		title: '4. Memory layout matters',
 		description: 'Row-major order, cache lines, and why contiguous access is ~100x faster than random access.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	// Phase 2 — Linear Algebra
 	{
-		title: '4. Matrix multiplication',
+		title: '5. Matrix multiplication',
 		description: 'The single most important operation in deep learning — naive implementation and why it matters.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '5. Optimizing matmul',
+		title: '6. Optimizing matmul',
 		description: 'Loop reordering, cache blocking, and going from 0.5 to 5 GFLOPS on a single CPU core.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '6. Batched matrix multiplication',
+		title: '7. Batched matrix multiplication',
 		description: 'Extending matmul to handle batches — essential for multi-head attention.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	// Phase 3 — Transformer Components
 	{
-		title: '7. Linear layers and GELU',
+		title: '8. Linear layers and GELU',
 		description: 'The fundamental building block: output = input × weight + bias, plus the activation that replaced ReLU.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '8. Layer normalization',
+		title: '9. Layer normalization',
 		description: 'Stabilizing activations with mean/variance normalization and learned scale-shift parameters.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '9. Softmax and numerical stability',
+		title: '10. Softmax and numerical stability',
 		description: 'Turning raw logits into probability distributions without overflow or underflow.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '10. Self-attention from scratch',
+		title: '11. Self-attention from scratch',
 		description: 'Queries, keys, values — the mechanism that lets tokens communicate with each other.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '11. Multi-head attention and causal masking',
+		title: '12. Multi-head attention and causal masking',
 		description: 'Parallel attention heads and the mask that prevents looking into the future.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '12. Feed-forward networks',
+		title: '13. Feed-forward networks',
 		description: 'The two-layer MLP where the model processes the information attention gathered.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '13. Transformer blocks and residual connections',
+		title: '14. Transformer blocks and residual connections',
 		description: 'Assembling attention + FFN with skip connections and pre-norm into a complete block.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	// Phase 4 — Tokenization
 	{
-		title: '14. Tokenization',
+		title: '15. Tokenization',
 		description: 'Converting text to numbers and back — character-level encoding and the path to BPE.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	// Phase 5 — Model assembly
 	{
-		title: '15. Model weights and loading',
+		title: '16. Model weights and loading',
 		description: 'Reading pretrained parameters from binary files and placing them into the right structures.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '16. Embeddings and the forward pass',
+		title: '17. Embeddings and the forward pass',
 		description: 'Token and position embeddings, stacking transformer blocks, and producing logits end-to-end.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	// Phase 6 — Inference
 	{
-		title: '17. Sampling strategies',
+		title: '18. Sampling strategies',
 		description: 'Temperature, top-k, and nucleus sampling — controlling the randomness of generation.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '18. Autoregressive generation',
+		title: '19. Autoregressive generation',
 		description: 'The generation loop: predict one token, append it, repeat — building a working inference engine.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	// Phase 7 — Optimization
 	{
-		title: '19. KV cache',
+		title: '20. KV cache',
 		description: 'The key optimization for inference — caching keys and values to avoid redundant computation.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	{
-		title: '20. Profiling and performance',
+		title: '21. Profiling and performance',
 		description: 'Finding bottlenecks, parallelizing with threads, and pre-allocating memory for speed.',
 		href: '/tutorials',
 		status: 'Coming soon',
 	},
 	// Phase 8 — Advanced
 	{
-		title: '21. Rotary positional embeddings',
+		title: '22. Rotary positional embeddings',
 		description: 'RoPE — encoding position directly into attention via rotation, as used in LLaMA and Mistral.',
 		href: '/tutorials',
 		status: 'Coming soon',
@@ -504,7 +511,7 @@ const milestones = [
 
 			<section id="roadmap" class="roadmap" aria-label="Roadmap overview">
 			<h2>Learning path</h2>
-			<p>21 bite-sized tutorials taking you from tensors to a working transformer inference engine.</p>
+			<p>22 bite-sized tutorials taking you from tensors to a working transformer inference engine.</p>
 				<div class="timeline-shell">
 					<svg class="timeline-path" aria-hidden="true">
 					</svg>

@@ -1,37 +1,40 @@
 ---
-title: 'NanoLLM #1: Project Scope and System Design'
-description: 'Define goals, constraints, and architecture before writing the first line of model code.'
+title: "Introduction: What We're Building"
+description: 'A high-level overview of the NanoLLM project — building a transformer inference engine from scratch.'
 pubDate: 'Feb 17 2026'
 heroImage: '../../assets/blog-placeholder-3.jpg'
 ---
 
-NanoLLM starts with one principle: **learn by building**.
+Large language models like GPT, LLaMA, and Mistral can feel like black boxes. NanoLLM is a project to **demystify them by building one piece at a time** — from raw tensor math all the way to a working inference engine that generates text.
 
-Before touching Transformer code, we should be explicit about what we are building:
+## The Goal
 
-- A small decoder-only GPT-like model.
-- Trained on a modest corpus so experiments remain affordable.
-- End-to-end pipeline: tokenizer → dataset → model → training → inference.
+By the end of this series, you'll have built a minimal but complete transformer inference engine. Given a set of pretrained weights and a text prompt, it will generate continuations token by token — the same core loop that powers every LLM you've used.
 
-## Milestones
+## What We'll Cover
 
-1. **Tokenizer + data pipeline**
-2. **Transformer decoder implementation**
-3. **Training loop with evaluation metrics**
-4. **Inference and sampling utilities**
-5. **Iteration and diagnostics**
+The series is organized into phases, each building on the last:
 
-## Constraints that matter
+**Tensors and linear algebra** — We start with the data structure at the heart of every model: the tensor. Then we implement matrix multiplication, the single operation that accounts for nearly all of a transformer's compute.
 
-- Keep the codebase understandable for software engineers.
-- Prefer explicit implementations over black-box abstractions.
-- Use reproducible configuration for every experiment.
+**Transformer components** — Linear layers, layer normalization, softmax, self-attention, multi-head attention, feed-forward networks, and residual connections. Each gets its own focused post.
 
-In the next article, we’ll begin with tokenization strategy and corpus preparation.
+**Tokenization** — How text becomes a sequence of integers the model can process, and how model output becomes text again.
 
-```cpp
-// testing how cpp code would look like
-int main() {
-    return 0;
-}
-```
+**Model assembly** — Loading pretrained weights from disk, wiring up embeddings, and running a full forward pass through stacked transformer blocks.
+
+**Inference** — Sampling strategies (temperature, top-k, nucleus) and the autoregressive generation loop.
+
+**Optimization** — KV caching, profiling, and parallelism to make inference fast.
+
+## What This Is Not
+
+This is not a training tutorial. We won't implement backpropagation or write a training loop. The focus is entirely on **understanding the architecture and running inference** — the part that turns weights into words.
+
+We also won't wrap things in abstractions until we understand what's underneath. Every operation is implemented explicitly before we move on.
+
+## How to Follow Along
+
+Each post is self-contained. Read them in order the first time through, but feel free to jump to any topic you're curious about — they're designed to be short and focused.
+
+Let's start with the most fundamental piece: [what a tensor actually is](/tutorials).
