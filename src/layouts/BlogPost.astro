@@ -11,9 +11,10 @@ type Props = CollectionEntry<'tutorials'>['data'];
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
+<!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={heroImage} type="article" articleDate={pubDate} articleUpdatedDate={updatedDate} />
 		<style>
 			main {
 				width: min(920px, calc(100% - 2rem));
@@ -75,7 +76,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 			
 			.article-header h1 {
-				margin: 0;
+				margin: 0 0 0.75rem;
 				font-size: 2.5rem;
 				font-weight: 800;
 				line-height: 1.2;
@@ -84,6 +85,13 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
 				background-clip: text;
+			}
+			
+			.article-description {
+				margin: 0;
+				color: rgb(var(--gray));
+				font-size: 1.1rem;
+				line-height: 1.6;
 			}
 			
 			.prose {
@@ -207,24 +215,25 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			<article>
 				{heroImage && (
 					<div class="hero-image">
-						<Image width={1840} height={920} src={heroImage} alt="" />
+						<Image width={1840} height={920} src={heroImage} alt={`Cover image for ${title}`} loading="eager" />
 					</div>
 				)}
 				<div class="content-wrapper">
-					<div class="article-header">
+					<header class="article-header">
 						<div class="date-info">
-							<FormattedDate date={pubDate} />
+							<time datetime={pubDate.toISOString()}><FormattedDate date={pubDate} /></time>
 							{updatedDate && (
 								<>
 									<span class="date-separator">•</span>
 									<span class="last-updated-on">
-										Updated <FormattedDate date={updatedDate} />
+										Updated <time datetime={updatedDate.toISOString()}><FormattedDate date={updatedDate} /></time>
 									</span>
 								</>
 							)}
 						</div>
 						<h1>{title}</h1>
-					</div>
+						{description && <p class="article-description">{description}</p>}
+					</header>
 					<div class="prose">
 						<slot />
 					</div>

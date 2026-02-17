@@ -159,7 +159,7 @@ const posts = (await getCollection('tutorials')).sort(
 							<a class="article-link" href={`/tutorials/${post.id}/`}>
 								{post.data.heroImage && (
 									<div class="tutorial-image">
-										<Image width={560} height={315} src={post.data.heroImage} alt="" />
+										<Image width={560} height={315} src={post.data.heroImage} alt={`Cover image for ${post.data.title}`} />
 									</div>
 								)}
 								<div class="article-text">
