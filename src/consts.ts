@@ -5,4 +5,4 @@ export const SITE_TITLE = 'NanoLLM';
 export const SITE_DESCRIPTION =
 	'A practical, engineer-friendly guide to building a GPT-style LLM from scratch.';
 export const SITE_AUTHOR = 'Kevin Chacon';
-export const SITE_GITHUB_URL = 'https://github.com/kevinchacon/NanoLLMBlog';
+export const SITE_GITHUB_URL = 'https://github.com/kevinchacon/NanoLLM';
