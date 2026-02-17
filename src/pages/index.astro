@@ -3,47 +3,565 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const milestones = [
+	{
+		title: '1. Foundations: tensors and core math',
+		description: 'Start with the basics needed to reason about model computations.',
+		href: '/blog/first-post/',
+		status: 'Available',
+	},
+	{
+		title: '2. Transformer building blocks',
+		description: 'Attention, normalization, feed-forward layers, and how they fit together.',
+		href: '/blog',
+		status: 'Coming soon',
+	},
+	{
+		title: '3. Tokenization and model input',
+		description: 'How raw text becomes tokens and enters the model pipeline.',
+		href: '/blog',
+		status: 'Coming soon',
+	},
+	{
+		title: '4. Forward pass and weights',
+		description: 'Connect learned weights and run an end-to-end inference pass.',
+		href: '/blog',
+		status: 'Coming soon',
+	},
+	{
+		title: '5. Text generation and sampling',
+		description: 'Generate tokens with simple decoding and sampling strategies.',
+		href: '/blog',
+		status: 'Coming soon',
+	},
+	{
+		title: '6. Optimization and performance',
+		description: 'Profile bottlenecks and improve inference speed step by step.',
+		href: '/blog',
+		status: 'Coming soon',
+	},
+];
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			.hero {
+				padding: 0.5rem 0 0.9rem;
+				max-width: 740px;
+			}
+			.hero h1 {
+				font-size: clamp(1.9rem, 4vw, 2.8rem);
+				margin-bottom: 0.4rem;
+			}
+			.hero p {
+				font-size: 0.98rem;
+				max-width: 62ch;
+				margin-bottom: 0.85rem;
+				color: rgb(var(--gray));
+			}
+			.cta {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.6rem;
+			}
+			.cta a {
+				display: inline-block;
+				padding: 0.6rem 0.9rem;
+				border-radius: 8px;
+				font-weight: 560;
+				text-decoration: none;
+				font-size: 0.92rem;
+			}
+			.cta .primary {
+				background: linear-gradient(180deg, #cb7a7a, var(--accent-dark));
+				color: #fff;
+				box-shadow: none;
+			}
+			.cta .secondary {
+				border: 1px solid rgba(var(--border), 0.9);
+				color: rgb(var(--black));
+				background: rgba(var(--surface-soft), 0.42);
+			}
+			.roadmap {
+				margin-top: 1.5rem;
+				max-width: 980px;
+			}
+			.roadmap p {
+				color: rgb(var(--gray));
+			}
+			/* --- Timeline container --- */
+			.timeline-shell {
+				position: relative;
+			}
+			.timeline-path {
+				position: absolute;
+				top: 0;
+				left: 0;
+				pointer-events: none;
+				overflow: visible;
+				z-index: 0;
+			}
+			.construction-icons {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+				z-index: 0;
+				opacity: 0.16;
+			}
+			.construction-icon {
+				position: absolute;
+				width: 48px;
+				height: 48px;
+				fill: none;
+				stroke: rgba(var(--gray), 0.7);
+			}
+			.timeline-path :global(.seg) {
+				fill: none;
+				stroke: rgba(var(--accent-rgb), 0.55);
+				stroke-width: 2;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+				filter: drop-shadow(0 0 3px rgba(var(--accent-rgb), 0.2));
+				transition: stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease;
+			}
+			.timeline-path :global(.seg.muted) {
+				stroke: rgba(var(--gray), 0.3);
+				stroke-dasharray: 3 4;
+				filter: drop-shadow(0 0 2px rgba(var(--gray), 0.1));
+			}
+			.timeline-path :global(.seg.pulse) {
+				stroke: #ff9b9b;
+				stroke-width: 3;
+				filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.7));
+				animation: seg-pulse 1s ease-in-out infinite;
+			}
+			@keyframes seg-pulse {
+				0%, 100% { filter: drop-shadow(0 0 4px rgba(var(--accent-rgb), 0.5)); }
+				50% { filter: drop-shadow(0 0 14px rgba(var(--accent-rgb), 0.9)); }
+			}
+			.timeline {
+				position: relative;
+				list-style: none;
+				margin: 1rem 0 0;
+				padding: 0;
+				z-index: 1;
+			}
+			/* --- Items --- */
+			.timeline-item {
+				position: relative;
+				padding: 0 0 1.25rem 0;
+				box-sizing: border-box;
+				z-index: 2;
+			}
+			/* --- Cards --- */
+			.timeline-link,
+			.timeline-card {
+				display: block;
+				text-decoration: none;
+				padding: 0.75rem 0.85rem;
+				border-radius: 10px;
+				background: rgb(var(--surface));
+				border: 1px solid rgba(var(--border), 0.75);
+				box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+				transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+			}
+			.timeline-link:hover {
+				transform: translateY(-2px);
+				border-color: #ff9b9b;
+				background: rgb(var(--surface));
+				box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22), 0 0 0 2px rgba(var(--accent-rgb), 0.92);
+				animation: card-pulse 1s ease-in-out infinite;
+			}
+			.timeline-card.coming-soon {
+				border: 1.5px dashed rgba(var(--border), 0.5);
+				background: rgb(var(--surface));
+				opacity: 0.75;
+				cursor: default;
+			}
+			@keyframes card-pulse {
+				0%, 100% { box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22), 0 0 0 2px rgba(var(--accent-rgb), 0.7); }
+				50% { box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22), 0 0 0 2.5px rgba(var(--accent-rgb), 1), 0 0 16px rgba(var(--accent-rgb), 0.5); }
+			}
+			.timeline-head {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 0.6rem;
+			}
+			.timeline-title {
+				margin: 0;
+				font-size: 1rem;
+				line-height: 1.25;
+				color: rgb(var(--black));
+			}
+			.status {
+				font-size: 0.75rem;
+				line-height: 1;
+				padding: 0.26rem 0.42rem;
+				border-radius: 999px;
+				border: 1px solid rgba(var(--border), 0.8);
+				color: rgb(var(--gray));
+				white-space: nowrap;
+			}
+			.status.live {
+				border-color: rgba(var(--accent-rgb), 0.75);
+				color: rgb(var(--black));
+			}
+			.timeline-description {
+				margin: 0.35rem 0 0;
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+			}
+			/* --- Mobile --- */
+			@media (max-width: 720px) {
+				.timeline-item {
+					padding-left: 0;
+				}
+			}
+			/* --- Desktop zigzag --- */
+			@media (min-width: 900px) {
+				.timeline-item {
+					width: calc(50% - 1.5rem);
+					padding: 0 0 1.25rem;
+				}
+				.timeline-item:nth-child(odd) {
+					margin-right: auto;
+					padding-right: 1rem;
+				}
+				.timeline-item:nth-child(even) {
+					margin-left: auto;
+					padding-left: 1rem;
+				}
+				.timeline-link,
+				.timeline-card {
+					padding: 0.78rem 0.9rem;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="hero">
+				<h1>Learn AI architecture by building a tiny GPT-style model.</h1>
+				<p>
+					NanoLLM is a beginner-friendly guide to understanding transformer systems from the ground up.
+					Each concept is introduced in its own tutorial section.
+				</p>
+				<div class="cta">
+					<a class="primary" href="/blog">Start reading</a>
+				</div>
+			</section>
+
+			<section id="roadmap" class="roadmap" aria-label="Roadmap overview">
+				<h2>Roadmap at a glance</h2>
+				<p>Each milestone links to its tutorial guide. Most are in progress and marked clearly.</p>
+				<div class="timeline-shell">
+					<svg class="timeline-path" aria-hidden="true">
+					</svg>
+					<div class="construction-icons" aria-hidden="true">
+						<!-- Top section - sparse -->
+						<!-- Diagonal construction lines -->
+						<svg class="construction-icon" style="top: 25%; right: 10%; width: 55px; height: 55px; transform: rotate(-8deg);" viewBox="0 0 60 60" fill="none" stroke-width="1">
+							<line x1="0" y1="20" x2="40" y2="20" stroke-dasharray="4 3"/>
+							<line x1="0" y1="30" x2="40" y2="30" stroke-dasharray="4 3"/>
+							<line x1="10" y1="10" x2="10" y2="40" stroke-dasharray="4 3"/>
+						</svg>
+						<!-- Small grid top -->
+						<svg class="construction-icon" style="top: 18%; left: 12%; width: 35px; height: 35px; transform: rotate(12deg);" viewBox="0 0 40 40" fill="none" stroke-width="0.8">
+							<rect x="5" y="5" width="10" height="10" />
+							<rect x="15" y="5" width="10" height="10" />
+							<rect x="5" y="15" width="10" height="10" />
+							<rect x="15" y="15" width="10" height="10" />
+						</svg>
+						
+						<!-- Middle section - moderate density -->
+						<!-- Angled lines left -->
+						<svg class="construction-icon" style="top: 35%; left: 5%; width: 45px; height: 45px; transform: rotate(18deg);" viewBox="0 0 50 50" fill="none" stroke-width="1">
+							<line x1="10" y1="0" x2="10" y2="35" stroke-dasharray="5 4"/>
+							<line x1="20" y1="0" x2="20" y2="35" stroke-dasharray="5 4"/>
+							<line x1="30" y1="0" x2="30" y2="35" stroke-dasharray="5 4"/>
+						</svg>
+						<!-- Measurement marks -->
+						<svg class="construction-icon" style="top: 40%; right: 12%; width: 60px; height: 30px; transform: rotate(-22deg);" viewBox="0 0 60 20" fill="none" stroke-width="1">
+							<line x1="0" y1="10" x2="45" y2="10" />
+							<line x1="5" y1="7" x2="5" y2="13" />
+							<line x1="15" y1="7" x2="15" y2="13" />
+							<line x1="25" y1="7" x2="25" y2="13" />
+							<line x1="35" y1="7" x2="35" y2="13" />
+						</svg>
+						<!-- Corner brackets -->
+						<svg class="construction-icon" style="top: 48%; left: 8%; width: 38px; height: 38px; transform: rotate(5deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.5">
+							<path d="M8 12L8 8L12 8M32 8L28 8L28 12M8 28L8 32L12 32M32 32L28 32L28 28"/>
+						</svg>
+						
+						<!-- Lower section - dense -->
+						<!-- Corner L-shapes -->
+						<svg class="construction-icon" style="top: 58%; right: 14%; width: 50px; height: 50px; transform: rotate(-17deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.2">
+							<path d="M10 10L10 25L25 25M30 15L30 30L15 30"/>
+						</svg>
+						<!-- Grid pattern -->
+						<svg class="construction-icon" style="top: 65%; right: 7%; width: 42px; height: 42px; transform: rotate(14deg);" viewBox="0 0 50 50" fill="none" stroke-width="0.8">
+							<line x1="0" y1="10" x2="30" y2="10" />
+							<line x1="0" y1="20" x2="30" y2="20" />
+							<line x1="0" y1="30" x2="30" y2="30" />
+							<line x1="10" y1="0" x2="10" y2="30" />
+							<line x1="20" y1="0" x2="20" y2="30" />
+						</svg>
+						<!-- Crosshairs -->
+						<svg class="construction-icon" style="top: 72%; left: 9%; width: 52px; height: 52px; transform: rotate(-24deg);" viewBox="0 0 40 40" fill="none" stroke-width="1">
+							<line x1="20" y1="5" x2="20" y2="15" />
+							<line x1="20" y1="25" x2="20" y2="35" />
+							<line x1="5" y1="20" x2="15" y2="20" />
+							<line x1="25" y1="20" x2="35" y2="20" />
+							<circle cx="20" cy="20" r="8"/>
+						</svg>
+						<!-- Additional dense icons at bottom -->
+						<svg class="construction-icon" style="top: 68%; right: 15%; width: 40px; height: 40px; transform: rotate(27deg);" viewBox="0 0 50 50" fill="none" stroke-width="1">
+							<line x1="10" y1="0" x2="10" y2="30" stroke-dasharray="3 3"/>
+							<line x1="20" y1="0" x2="20" y2="30" stroke-dasharray="3 3"/>
+						</svg>
+						<svg class="construction-icon" style="top: 75%; left: 6%; width: 46px; height: 46px; transform: rotate(-11deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.2">
+							<path d="M5 10L15 10M5 20L15 20M5 30L15 30M25 10L35 10M25 20L35 20"/>
+						</svg>
+						<svg class="construction-icon" style="top: 78%; right: 9%; width: 38px; height: 38px; transform: rotate(-32deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.5">
+							<path d="M10 5L10 15M20 5L20 15M30 5L30 15M10 25L10 35M20 25L20 35"/>
+						</svg>
+						<svg class="construction-icon" style="top: 82%; left: 11%; width: 44px; height: 44px; transform: rotate(19deg);" viewBox="0 0 50 50" fill="none" stroke-width="0.9">
+							<rect x="5" y="5" width="12" height="12" />
+							<rect x="20" y="5" width="12" height="12" />
+							<rect x="5" y="20" width="12" height="12" />
+						</svg>
+						<svg class="construction-icon" style="top: 85%; right: 11%; width: 50px; height: 50px; transform: rotate(8deg);" viewBox="0 0 60 60" fill="none" stroke-width="1">
+							<line x1="0" y1="15" x2="35" y2="15" stroke-dasharray="5 4"/>
+							<line x1="0" y1="25" x2="35" y2="25" stroke-dasharray="5 4"/>
+							<line x1="0" y1="35" x2="35" y2="35" stroke-dasharray="5 4"/>
+						</svg>
+						<svg class="construction-icon" style="top: 88%; left: 8%; width: 42px; height: 42px; transform: rotate(-26deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.3">
+							<path d="M7 7L7 18L18 18M33 22L33 33L22 33"/>
+						</svg>
+						<svg class="construction-icon" style="top: 91%; right: 13%; width: 48px; height: 48px; transform: rotate(16deg);" viewBox="0 0 50 50" fill="none" stroke-width="1">
+							<circle cx="25" cy="25" r="10"/>
+							<line x1="25" y1="10" x2="25" y2="15" />
+							<line x1="25" y1="35" x2="25" y2="40" />
+							<line x1="10" y1="25" x2="15" y2="25" />
+							<line x1="35" y1="25" x2="40" y2="25" />
+						</svg>
+						<svg class="construction-icon" style="top: 94%; left: 10%; width: 36px; height: 36px; transform: rotate(23deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.1">
+							<line x1="5" y1="5" x2="25" y2="5" stroke-dasharray="4 3"/>
+							<line x1="5" y1="15" x2="25" y2="15" stroke-dasharray="4 3"/>
+							<line x1="5" y1="25" x2="25" y2="25" stroke-dasharray="4 3"/>
+						</svg>
+						<!-- Extra bottom icons -->
+						<svg class="construction-icon" style="top: 77%; left: 14%; width: 40px; height: 40px; transform: rotate(-15deg);" viewBox="0 0 40 40" fill="none" stroke-width="1">
+							<path d="M5 8L5 4L9 4M31 4L27 4L27 8M5 32L5 36L9 36M31 36L27 36L27 32"/>
+						</svg>
+						<svg class="construction-icon" style="top: 80%; right: 6%; width: 44px; height: 44px; transform: rotate(21deg);" viewBox="0 0 50 50" fill="none" stroke-width="0.9">
+							<line x1="10" y1="10" x2="30" y2="10" stroke-dasharray="3 3"/>
+							<line x1="10" y1="20" x2="30" y2="20" stroke-dasharray="3 3"/>
+							<line x1="15" y1="5" x2="15" y2="25" stroke-dasharray="3 3"/>
+							<line x1="25" y1="5" x2="25" y2="25" stroke-dasharray="3 3"/>
+						</svg>
+						<svg class="construction-icon" style="top: 84%; left: 7%; width: 38px; height: 38px; transform: rotate(-9deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.2">
+							<line x1="8" y1="8" x2="18" y2="8"/>
+							<line x1="8" y1="16" x2="18" y2="16"/>
+							<line x1="22" y1="8" x2="32" y2="8"/>
+							<line x1="22" y1="16" x2="32" y2="16"/>
+							<line x1="8" y1="24" x2="18" y2="24"/>
+							<line x1="22" y1="24" x2="32" y2="24"/>
+						</svg>
+						<svg class="construction-icon" style="top: 87%; right: 14%; width: 41px; height: 41px; transform: rotate(28deg);" viewBox="0 0 40 40" fill="none" stroke-width="1">
+							<rect x="5" y="5" width="10" height="10" />
+							<rect x="17" y="5" width="10" height="10" />
+							<rect x="5" y="17" width="10" height="10" />
+						</svg>
+						<svg class="construction-icon" style="top: 90%; left: 13%; width: 47px; height: 47px; transform: rotate(-19deg);" viewBox="0 0 50 50" fill="none" stroke-width="1.1">
+							<line x1="10" y1="5" x2="10" y2="30" stroke-dasharray="4 4"/>
+							<line x1="20" y1="5" x2="20" y2="30" stroke-dasharray="4 4"/>
+							<line x1="30" y1="5" x2="30" y2="30" stroke-dasharray="4 4"/>
+						</svg>
+						<svg class="construction-icon" style="top: 93%; right: 8%; width: 43px; height: 43px; transform: rotate(13deg);" viewBox="0 0 40 40" fill="none" stroke-width="1.3">
+							<path d="M8 8L8 22L22 22M32 18L32 32L18 32"/>
+						</svg>
+						<svg class="construction-icon" style="top: 96%; left: 9%; width: 39px; height: 39px; transform: rotate(-24deg);" viewBox="0 0 40 40" fill="none" stroke-width="1">
+							<circle cx="20" cy="20" r="8"/>
+							<line x1="20" y1="8" x2="20" y2="12" />
+							<line x1="20" y1="28" x2="20" y2="32" />
+							<line x1="8" y1="20" x2="12" y2="20" />
+							<line x1="28" y1="20" x2="32" y2="20" />
+						</svg>
+						<svg class="construction-icon" style="top: 96%; right: 12%; width: 45px; height: 45px; transform: rotate(17deg);" viewBox="0 0 50 50" fill="none" stroke-width="0.95">
+							<line x1="5" y1="10" x2="30" y2="10" />
+							<line x1="5" y1="20" x2="30" y2="20" />
+							<line x1="5" y1="30" x2="30" y2="30" />
+							<line x1="15" y1="5" x2="15" y2="35" />
+						</svg>
+					</div>
+					<ol class="timeline">
+						{milestones.map((milestone) => (
+							<li class:list={["timeline-item", { live: milestone.status === 'Available' }]} data-status={milestone.status}>
+								{milestone.status === 'Available' ? (
+									<a class="timeline-link" href={milestone.href}>
+										<div class="timeline-head">
+											<h3 class="timeline-title">{milestone.title}</h3>
+											<span class:list={["status", { live: milestone.status === 'Available' }]}>
+												{milestone.status}
+											</span>
+										</div>
+										<p class="timeline-description">{milestone.description}</p>
+									</a>
+								) : (
+									<div class="timeline-card coming-soon">
+										<div class="timeline-head">
+											<h3 class="timeline-title">{milestone.title}</h3>
+											<span class:list={["status", { live: milestone.status === 'Available' }]}>
+												{milestone.status}
+											</span>
+										</div>
+										<p class="timeline-description">{milestone.description}</p>
+									</div>
+								)}
+							</li>
+						))}
+					</ol>
+				</div>
+			</section>
 		</main>
 		<Footer />
+	<script>
+		const svgNS = 'http://www.w3.org/2000/svg';
+
+		function drawStaircase() {
+			const shell = document.querySelector('.timeline-shell');
+			const svg = document.querySelector('.timeline-path') as SVGSVGElement | null;
+			if (!shell || !svg) return;
+
+			const items = Array.from(document.querySelectorAll('.timeline-item'));
+			const cards = Array.from(document.querySelectorAll('.timeline-link, .timeline-card'));
+			if (cards.length < 2) return;
+
+			// Clear old segments
+			svg.querySelectorAll('.seg').forEach((el) => el.remove());
+
+			const shellRect = shell.getBoundingClientRect();
+			const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+
+			const w = shellRect.width;
+			const h = shellRect.height;
+			svg.setAttribute('width', String(w));
+			svg.setAttribute('height', String(h));
+			svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+			if (!isDesktop) {
+				const pts = cards.map((c) => {
+					const r = c.getBoundingClientRect();
+					return { x: r.left - shellRect.left - 6, y: r.top + r.height / 2 - shellRect.top };
+				});
+				for (let i = 0; i < pts.length - 1; i++) {
+				const fromStatus = items[i]?.getAttribute('data-status');
+				const toStatus = items[i + 1]?.getAttribute('data-status');
+				const isMuted = fromStatus === 'Coming soon' && toStatus === 'Coming soon';
+
+				const line = document.createElementNS(svgNS, 'line');
+				line.setAttribute('x1', String(pts[i].x));
+				line.setAttribute('y1', String(pts[i].y));
+				line.setAttribute('x2', String(pts[i + 1].x));
+				line.setAttribute('y2', String(pts[i + 1].y));
+				line.classList.add('seg');
+				if (isMuted) line.classList.add('muted');
+					line.dataset.from = String(i);
+					line.dataset.to = String(i + 1);
+					svg.appendChild(line);
+				}
+				return;
+			}
+
+			// Desktop: staircase with individual segments per connection
+			const anchors = cards.map((c) => {
+				const r = c.getBoundingClientRect();
+				return {
+					x: r.left + r.width / 2 - shellRect.left,
+					y: r.top + r.height / 2 - shellRect.top,
+				};
+			});
+
+			for (let i = 0; i < anchors.length - 1; i++) {
+				const prev = anchors[i];
+				const curr = anchors[i + 1];
+				const corner = { x: curr.x, y: prev.y };
+
+				// Check status of both items
+				const fromStatus = items[i]?.getAttribute('data-status');
+				const toStatus = items[i + 1]?.getAttribute('data-status');
+				const isMuted = fromStatus === 'Coming soon' && toStatus === 'Coming soon';
+
+				// Horizontal segment
+				const hLine = document.createElementNS(svgNS, 'line');
+				hLine.setAttribute('x1', String(prev.x));
+				hLine.setAttribute('y1', String(prev.y));
+				hLine.setAttribute('x2', String(corner.x));
+				hLine.setAttribute('y2', String(corner.y));
+				hLine.classList.add('seg');
+				if (isMuted) hLine.classList.add('muted');
+				hLine.dataset.from = String(i);
+				hLine.dataset.to = String(i + 1);
+				svg.appendChild(hLine);
+
+				// Vertical segment
+				const vLine = document.createElementNS(svgNS, 'line');
+				vLine.setAttribute('x1', String(corner.x));
+				vLine.setAttribute('y1', String(corner.y));
+				vLine.setAttribute('x2', String(curr.x));
+				vLine.setAttribute('y2', String(curr.y));
+				vLine.classList.add('seg');
+				if (isMuted) vLine.classList.add('muted');
+				vLine.dataset.from = String(i);
+				vLine.dataset.to = String(i + 1);
+				svg.appendChild(vLine);
+			}
+		}
+
+		// Hover: pulse the card border AND the connected line segments (only for available cards)
+		function setupHover() {
+			const cards = Array.from(document.querySelectorAll('.timeline-link'));
+			const items = Array.from(document.querySelectorAll('.timeline-item'));
+			cards.forEach((card) => {
+				const idx = items.indexOf(card.closest('.timeline-item'));
+				card.addEventListener('mouseenter', () => {
+					document.querySelectorAll('.timeline-path .seg').forEach((seg) => {
+						const el = seg as HTMLElement;
+						if (el.dataset.from === String(idx) || el.dataset.to === String(idx)) {
+							el.classList.add('pulse');
+						}
+					});
+				});
+				card.addEventListener('mouseleave', () => {
+					document.querySelectorAll('.timeline-path .seg.pulse').forEach((seg) => {
+						seg.classList.remove('pulse');
+					});
+				});
+			});
+		}
+
+		requestAnimationFrame(() => {
+			drawStaircase();
+			setupHover();
+			setTimeout(() => { drawStaircase(); setupHover(); }, 250);
+		});
+
+		window.addEventListener('resize', () => { drawStaircase(); setupHover(); });
+
+		const shell = document.querySelector('.timeline-shell');
+		if (shell) {
+			new ResizeObserver(() => { drawStaircase(); setupHover(); }).observe(shell);
+		}
+	</script>
 	</body>
 </html>

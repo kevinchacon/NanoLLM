@@ -1,62 +1,53 @@
-# Astro Starter Kit: Blog
+# NanoLLM Blog
+
+NanoLLM is a free, public tutorial blog documenting how to build a GPT-style language model from scratch.
+
+The site is built with Astro and deployed to GitHub Pages with a push-to-publish workflow.
+
+## Stack
+
+- Astro (static site generation)
+- Markdown content collections (`src/content/blog`)
+- GitHub Actions CI/CD
+- GitHub Pages hosting (free)
+
+## Local development
 
 ```sh
-npm create astro@latest -- --template blog
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Open `http://localhost:4321`.
 
-Features:
+## How publishing works
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+1. Add or edit posts in `src/content/blog/*.md`.
+2. Commit and push to `main`.
+3. GitHub Actions workflow at `.github/workflows/deploy.yml` builds and deploys automatically.
 
-## 🚀 Project Structure
+No manual deployment step is needed.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Add a new post
 
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+Create a Markdown file inside `src/content/blog/` with frontmatter:
+
+```md
+---
+title: 'Post title'
+description: 'Short description'
+pubDate: 'Feb 17 2026'
+heroImage: '../../assets/blog-placeholder-1.jpg'
+---
+
+Your content here.
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Domain setup
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- The custom domain is configured via `public/CNAME` as `nanollm.com`.
+- In GitHub repo settings, enable GitHub Pages and point DNS records for `nanollm.com` to GitHub Pages.
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+## Future ads support
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+When you are ready, ads can be added without changing hosting by injecting ad script tags in `src/components/BaseHead.astro` and placing ad blocks in layouts/pages.
