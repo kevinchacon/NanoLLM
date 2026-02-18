@@ -2,7 +2,7 @@
 title: "0. Introduction: What We're Building"
 description: 'A high-level overview of the NanoLLM project — building a transformer inference engine from scratch.'
 pubDate: 'Feb 17 2026'
-heroImage: '../../assets/blog-placeholder-3.jpg'
+heroImage: '../../assets/0-introduction.png'
 ---
 
 Large language models like GPT, LLaMA, and Mistral can feel like black boxes. NanoLLM is a project to **demystify them by building one piece at a time** — from raw tensor math all the way to a working inference engine that generates text.
