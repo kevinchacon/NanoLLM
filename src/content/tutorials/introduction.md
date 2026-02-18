@@ -1,5 +1,5 @@
 ---
-title: "Introduction: What We're Building"
+title: "0. Introduction: What We're Building"
 description: 'A high-level overview of the NanoLLM project — building a transformer inference engine from scratch.'
 pubDate: 'Feb 17 2026'
 heroImage: '../../assets/blog-placeholder-3.jpg'
