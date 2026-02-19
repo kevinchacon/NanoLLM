@@ -17,7 +17,7 @@ const milestones = [
 		title: '1. What is a tensor?',
 		description: 'Multi-dimensional arrays as the foundation of every model computation — shapes, strides, and indexing.',
 		href: '/tutorials/1-tensor/',
-		status: 'Available',
+		status: 'In progress',
 	},
 	{
 		title: '2. Tensor operations',
@@ -452,6 +452,11 @@ const milestones = [
 				color: rgb(var(--black));
 				font-weight: 550;
 			}
+			.status.in-progress {
+				border-color: rgba(180, 140, 60, 0.7);
+				color: rgb(220, 175, 80);
+				font-weight: 550;
+			}
 			.timeline-description {
 				margin: 0.45rem 0 0;
 				color: rgba(var(--gray-dark), 0.8);
@@ -655,12 +660,12 @@ const milestones = [
 					</div>
 					<ol class="timeline">
 						{milestones.map((milestone) => (
-							<li class:list={["timeline-item", { live: milestone.status === 'Available' }]} data-status={milestone.status}>
-								{milestone.status === 'Available' ? (
+							<li class:list={["timeline-item", { live: milestone.status === 'Available' || milestone.status === 'In progress' }]} data-status={milestone.status}>
+								{milestone.status === 'Available' || milestone.status === 'In progress' ? (
 									<a class="timeline-link" href={milestone.href}>
 										<div class="timeline-head">
 											<h3 class="timeline-title">{milestone.title}</h3>
-											<span class:list={["status", { live: milestone.status === 'Available' }]}>
+											<span class:list={["status", { live: milestone.status === 'Available' }, { 'in-progress': milestone.status === 'In progress' }]}>
 												{milestone.status}
 											</span>
 										</div>
@@ -670,7 +675,7 @@ const milestones = [
 									<div class="timeline-card coming-soon">
 										<div class="timeline-head">
 											<h3 class="timeline-title">{milestone.title}</h3>
-											<span class:list={["status", { live: milestone.status === 'Available' }]}>
+											<span class="status">
 												{milestone.status}
 											</span>
 										</div>
