@@ -44,3 +44,31 @@ For a transformer like GPT, this graph encodes the full architecture (don't worr
 The inference engine walks through this graph node by node — or in optimised parallel chunks — executing each operation in sequence.
 
 With that context established, we can now get into what tensors are and why they are the fundamental data structure behind every one of these operations.
+
+## Tensors
+
+A tensor is a multi-dimensional array of numbers. It is the fundamental data structure that flows along the edges of the computational graph — every input, output, and intermediate value in a neural network is expressed as a tensor.
+
+In practice, the word "tensor" is just a generalisation of things you already know:
+
+| Dimensions | Name   | Example                              |
+|-----------|--------|--------------------------------------|
+| 0         | Scalar | A single number: `1.0`               |
+| 1         | Vector | A list of numbers: `[1.0, 2.0, 3.0]` |
+| 2         | Matrix | A grid of numbers: `[[1, 2], [3, 4]]` |
+| 3+        | Tensor | Higher-dimensional arrays: a batch of matrices |
+
+During inference, almost everything is a tensor. To make this concrete (although do not worry about it for now):
+
+- **Input data** — A batch of tokenised text, shaped `[batch_size, sequence_length]`
+- **Model weights** — A linear layer's weight matrix, shaped `[in_features, out_features]`. These are loaded from the trained model file and remain fixed during inference.
+- **Intermediate activations** — The outputs of each layer as data flows through the graph. After the attention mechanism, for example, you might have a tensor of shape `[batch_size, sequence_length, hidden_dim]`.
+- **Key–value cache** — In autoregressive generation, past key and value tensors are cached to avoid redundant computation. These are typically shaped `[batch_size, num_heads, cached_length, head_dim]`.
+
+The inference engine's core job is to efficiently schedule a graph of tensor operations: taking input tensors, applying the operations defined by the graph using weight tensors, and producing output tensors.
+
+At the implementation level, a tensor is a contiguous block of memory plus some metadata. In C++, the data might be a `float*` or a quantised equivalent. The metadata describes:
+
+- **Shape** — the size of each dimension, e.g. `[4, 512, 768]`
+- **Strides** — how to navigate the memory layout (more on this in a later chapter)
+- **Data type** — `float32`, `float16`, `int8`, and so on 
