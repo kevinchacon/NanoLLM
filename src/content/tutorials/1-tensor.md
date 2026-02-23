@@ -72,3 +72,102 @@ At the implementation level, a tensor is a contiguous block of memory plus some 
 - **Shape** — the size of each dimension, e.g. `[4, 512, 768]`
 - **Strides** — how to navigate the memory layout (more on this in a later chapter)
 - **Data type** — `float32`, `float16`, `int8`, and so on 
+
+## Onto the Implementation
+
+Now that we have covered the concepts, we can move on to building. The first step is setting up the project environment.
+
+I'll be writing this in C++. If you'd prefer a different language, feel free to follow along in whatever you're comfortable with — the concepts are the same everywhere.
+
+### Project Structure
+
+Create the following structure inside your `nanollm` directory:
+
+```
+nanollm/
+├── CMakeLists.txt
+├── include/
+│   └── nanollm/
+├── src/
+├── tests/
+└── main.cpp
+```
+
+### CMakeLists.txt
+
+For those new to C++, `CMakeLists.txt` is the configuration file for CMake — a cross-platform build system. It tells the build system how to configure, compile, and link the project.
+
+The process happens in three stages:
+
+**1. Configuration** — CMake figures out:
+- Which compiler to use (e.g. `g++`, `clang++`)
+- Which language standard to enforce (e.g. C++17)
+- Where the source files are (e.g. `main.cpp`, `src/`)
+- Where the header files are (e.g. `include/`) — in C++, headers and implementations live in separate files
+- Which compiler flags to apply (e.g. `-Wall -O2`)
+
+**2. Compilation** — The build system translates each `.cpp` source file into an object file (`.o` or `.obj`), applying all configured flags and resolving `#include` directives.
+
+**3. Linking** — All object files are combined into a single executable. Function calls, variables, and library dependencies are resolved, producing a runnable binary.
+
+This is different from other languages:
+- **Python** — no compilation or linking needed; the interpreter handles everything at runtime.
+- **C# / Java** — compilation exists, but linking is handled by the runtime or the JVM.
+
+Add the following to your `CMakeLists.txt`:
+
+```cmake
+# Minimum CMake version required to build this project
+cmake_minimum_required(VERSION 3.16)
+
+# Project name and language
+# LANGUAGES CXX sets up the C++ compiler environment
+# and creates variables like NanoLLM_VERSION
+project(NanoLLM LANGUAGES CXX)
+
+# Use C++17
+set(CMAKE_CXX_STANDARD 17)
+
+# Require C++17 strictly — don't silently fall back to an older standard
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Compiler flags:
+# -Wall    enables most compiler warnings
+# -Wextra   enables additional warnings
+# -Wpedantic enforces strict ISO C++ compliance
+# -O2     optimization level 2 (good balance of performance and compile time)
+add_compile_options(-Wall -Wextra -Wpedantic -O2)
+
+# Collect all .cpp files under src/ recursively into SOURCES
+file(GLOB_RECURSE SOURCES src/*.cpp)
+
+# Create the main executable from main.cpp and all collected sources
+add_executable(nanollm main.cpp ${SOURCES})
+
+# Add the include/ directory to the header search path
+# PRIVATE means only this target uses it
+target_include_directories(nanollm PRIVATE include)
+
+# A second executable for tests — commented out for now, we'll add it later
+# add_executable(test_tensor tests/test_tensor.cpp ${SOURCES})
+# target_include_directories(test_tensor PRIVATE include)
+```
+
+Now we need to add some code to main.cpp so that it actually compiles and runs.
+```cpp
+// main.cpp
+
+int main() {
+    return 0;
+}
+```
+
+Once that's in place, build and run the project:
+
+```bash
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+./nanollm
+```
+
