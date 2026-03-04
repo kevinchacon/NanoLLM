@@ -1,7 +1,7 @@
 ---
 title: "1. What is a tensor?"
 description: 'Multi-dimensional arrays as the foundation of every model computation — shapes, strides, and indexing.'
-pubDate: 'Feb 19 2026'
+pubDate: 'Feb 27 2026'
 heroImage: '../../assets/1-what-is-a-tensor.png'
 ---
 
@@ -250,3 +250,29 @@ If you're already familiar with tensors, you may have noticed a few things are m
 - **Data type flexibility** — we've hardcoded `float` (float32) as the numeric type. A production engine would template this or use an enum to support other types for quantisation. We're keeping it simple for now.
 - **Operations** — we'll need to add mathematical operations such as matmul, addition, and softmax for each node in the computational graph.
 
+With the declaration in place, we can now implement it. Two things need to happen:
+
+1. **Constructor** — calculate the total number of elements from the shape, then allocate that much space for the data.
+2. **`size()`** — return the total number of floats currently stored.
+
+The implementation in `src/tensor.cpp`:
+```cpp
+// src/tensor.cpp
+#include <nanollm/tensor.hpp>
+#include <numeric>
+
+using namespace std;
+
+namespace nanollm {
+
+Tensor::Tensor(vector<size_t> shape) : shape_(std::move(shape)) {
+	size_t total = accumulate(shape_.begin(), shape_.end(), size_t{1}, multiplies<>());
+	data_.resize(total, 0.0f);
+}
+
+size_t Tensor::size() const {
+	return data_.size();
+}
+
+} // namespace nanollm
+```
