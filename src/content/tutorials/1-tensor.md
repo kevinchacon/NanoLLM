@@ -171,3 +171,82 @@ make -j$(nproc)
 ./nanollm
 ```
 
+Next, let's create the header at `include/nanollm/tensor.hpp`. To begin with, we'll just declare the class:
+
+```cpp
+// include/nanollm/tensor.hpp
+#pragma once
+
+namespace nanollm {
+
+class Tensor {
+  // TODO: Fill this in
+};
+} // namespace nanollm
+```
+
+As covered earlier, a tensor is two things: the raw data and the metadata that gives it shape. Concretely:
+
+- **The data** — a contiguous block of memory holding the actual numbers.
+- **The metadata** — the shape, which describes how that flat block of memory should be interpreted as a multi-dimensional structure.
+
+For example, a tensor with shape `{4, 512, 768}` holds `4 × 512 × 768 = 1,572,864` floats laid out end to end in memory. The shape is what gives that flat array its meaning: 4 batches, each with 512 tokens, each token represented by 768 values. The header needs to capture both.
+
+If you're not coming from C++, remember that the header is just a declaration stating what a `Tensor` holds and what you can do with it. We won't be adding any operations yet; this is just the container.
+
+We'll use `vector<float> data_` for the contiguous memory and `vector<size_t> shape_` for describing the multi-dimensional structure:
+
+```cpp
+// include/nanollm/tensor.hpp
+#pragma once
+
+#include <vector>
+#include <cstddef>
+
+using namespace std;
+
+namespace nanollm {
+
+class Tensor {
+
+private:
+	vector<float> data_;
+	vector<size_t> shape_;
+};
+
+} // namespace nanollm
+```
+
+We also need to declare a constructor and a `size()` method. The constructor only takes a shape — everything else can be derived from it:
+
+```cpp
+// include/nanollm/tensor.hpp
+#pragma once
+
+#include <vector>
+#include <cstddef>
+
+using namespace std;
+
+namespace nanollm {
+
+class Tensor {
+
+public:
+	Tensor(vector<size_t> shape);
+	size_t size() const;
+
+private:
+	vector<float> data_;
+	vector<size_t> shape_;
+};
+
+} // namespace nanollm
+```
+
+If you're already familiar with tensors, you may have noticed a few things are missing:
+
+- **Strides** — the metadata that tells you how to navigate the flat `data_` array as if it were multi-dimensional. For a shape of `{4, 512, 768}`, the strides would be `{512 × 768, 768, 1}`, meaning "to advance one step along dimension 0, skip 393,216 floats". We'll add this once we implement indexing or operations like transpose.
+- **Data type flexibility** — we've hardcoded `float` (float32) as the numeric type. A production engine would template this or use an enum to support other types for quantisation. We're keeping it simple for now.
+- **Operations** — we'll need to add mathematical operations such as matmul, addition, and softmax for each node in the computational graph.
+
